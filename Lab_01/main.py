@@ -23,7 +23,14 @@ def obtener_peliculas():
 
 def obtener_pelicula(id):
     # Lógica para buscar la película por su ID y devolver sus detalles
-    return jsonify(pelicula_encontrada)
+    pelicula_encontrada = None               #inicializamos la pelicula
+    for pelicula in peliculas:               #recorremos todas las peliculas 
+        if pelicula['id'] == id:
+            pelicula_encontrada = pelicula
+    if pelicula_encontrada:
+        return jsonify(pelicula_encontrada)  #si la encontramos la devolvemos
+    else:
+        return jsonify({'error': 'Película no encontrada'}), 404  #si no la encontramos da error
 
 
 def agregar_pelicula():
@@ -39,11 +46,26 @@ def agregar_pelicula():
 
 def actualizar_pelicula(id):
     # Lógica para buscar la película por su ID y actualizar sus detalles
+    pelicula_actualizada = None
+    for pelicula in peliculas:
+        if pelicula['id'] == id:
+            pelicula_actualizada = pelicula
+    if pelicula_actualizada is None:
+        return jsonify({'mensaje': 'Película no encontrada'}), 404
+    pelicula_actualizada['titulo'] = request.json['titulo']
+    pelicula_actualizada['genero'] = request.json['genero']   
     return jsonify(pelicula_actualizada)
 
 
 def eliminar_pelicula(id):
     # Lógica para buscar la película por su ID y eliminarla
+    pelicula_a_eliminar = None
+    for pelicula in peliculas:
+        if pelicula['id'] == id:
+            pelicula_a_eliminar = pelicula
+    if pelicula_a_eliminar is None:
+        return jsonify({'mensaje': 'Película no encontrada'}), 404
+    peliculas.remove(pelicula_a_eliminar)
     return jsonify({'mensaje': 'Película eliminada correctamente'})
 
 
