@@ -75,6 +75,18 @@ def obtener_nuevo_id():
         return ultimo_id + 1
     else:
         return 1
+    
+#inciso b#
+def peliculas_filtradas(genero):
+    peliculas_filtradas = []
+    for pelicula in peliculas:
+        if pelicula['genero'].lower() == genero.lower():
+            peliculas_filtradas.append(pelicula)
+        if not peliculas_filtradas:
+            return jsonify({'mensaje': 'Película no encontrada'}), 404
+    return jsonify(peliculas_filtradas)
+
+
 
 
 app.add_url_rule('/peliculas', 'obtener_peliculas', obtener_peliculas, methods=['GET'])
@@ -82,6 +94,9 @@ app.add_url_rule('/peliculas/<int:id>', 'obtener_pelicula', obtener_pelicula, me
 app.add_url_rule('/peliculas', 'agregar_pelicula', agregar_pelicula, methods=['POST'])
 app.add_url_rule('/peliculas/<int:id>', 'actualizar_pelicula', actualizar_pelicula, methods=['PUT'])
 app.add_url_rule('/peliculas/<int:id>', 'eliminar_pelicula', eliminar_pelicula, methods=['DELETE'])
+#endpoint inciso b
+app.add_url_rule('/peliculas/genero/<string:genero>', 'peliculas_filtradas', peliculas_filtradas, methods=['GET'])
+
 
 if __name__ == '__main__':
     app.run()
